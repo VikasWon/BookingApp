@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Room bookings · Fieldnote</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/" aria-label="Fieldnote home"><span class="brand-mark">F</span><span>fieldnote<span class="brand-dot">.</span></span></a><span class="top-label">ROOMS &amp; TIME</span></header>
+  <main>
+    <section class="intro"><p class="eyebrow">MEETING ROOM SCHEDULER</p><h1>Make space<br>for good work.</h1><p class="lede">A clear view of what’s booked, and room for what’s next.</p></section>
+    <section class="daybar"><div><span class="section-label">SCHEDULE</span><h2>Room availability</h2></div><label class="date-control">DAY <input id="selected-date" type="date" aria-label="Selected UTC date"></label><span class="utc-pill">● &nbsp;ALL TIMES UTC</span></section>
+    <div id="notice" role="status" class="notice" hidden></div>
+    <section id="rooms" class="room-grid" aria-live="polite"></section>
+    <section class="booking-panel"><div class="panel-copy"><p class="eyebrow">NEW RESERVATION</p><h2>Book a room</h2><p>Choose a room and a time that works.</p></div>
+      <form id="booking-form">
+        <label>Your name<input name="name" maxlength="100" required placeholder="e.g. Alex Morgan"></label>
+        <label>Room<select name="roomId" required></select></label>
+        <label>Date<input name="date" type="date" required></label>
+        <div class="time-row"><label>Starts<input name="startTime" type="time" step="60" required></label><span class="arrow">→</span><label>Ends<input name="endTime" type="time" step="60" required></label></div>
+        <button type="submit" class="submit">Confirm booking <span>↗</span></button>
+        <p class="form-hint">Times use 24-hour UTC. Bookings are limited to one calendar day.</p>
+      </form>
+    </section>
+    <footer><span>FIELDNOTE / ROOMS</span><span>PLAN WITH A LITTLE MORE CLARITY</span></footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
