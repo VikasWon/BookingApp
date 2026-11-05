@@ -32,13 +32,14 @@ The frontend test installs Playwright Chromium on first run if it is missing (ne
 - `GET /api/bookings?date=YYYY-MM-DD`
 - `GET /api/rooms/{roomId}/bookings?date=YYYY-MM-DD`
 - `POST /api/bookings` with `roomId`, `name`, `date`, `startTime`, `endTime`
+         Sample payload:{"name":"test Name","roomId":1,"date":"2026-11-05","startTime":"17:00","endTime":"18:00"}
 - `DELETE /api/bookings/{bookingId}`
 
 All dates and times are UTC. Request times use `HH:mm` with minute precision. See [the specification](docs/spec.md) for validation, status codes, response shapes, and acceptance criteria.
 
 ## Concurrency approach
 
-Booking creation opens a SQLite immediate write transaction before checking availability. SQLite serializes writers, so when requests compete, the second request waits for the first transaction, then checks against its committed booking and returns `409 Conflict`. The overlap check and insert happen within that same transaction. The API test sends two competing requests and checks that exactly one booking is saved.
+Booking creation checks for overlap and inserts within an EF Core SQLite transaction. SQLite serializes writers, so when requests compete, the second request waits for the first transaction, then checks against its committed booking and returns `409 Conflict`. The overlap check and insert happen within that same transaction. The API test sends two competing requests and checks that exactly one booking is saved, this is acheived by leveraging the synchronization class `Barrier` in System.Threading.
 
 This serializes writes across the whole SQLite database, including independent rooms. That is a sensible tradeoff for this local, low-volume app. If write throughput or multiple app instances became important, I would move to PostgreSQL and enforce non-overlap with a database exclusion constraint scoped to the room.
 
